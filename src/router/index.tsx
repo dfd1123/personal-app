@@ -75,9 +75,9 @@ export default function RouterView() {
    * @description 현재 라우팅 되는 route 정보를 redux에 mutate
    */
 
-  useEffect(() => {
-    dispatch(setRouteInfo({ routeInfo }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setRouteInfo({ routeInfo }));
+  // }, []);
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';
