@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import icoAlertSuccess from '@/assets/img/kmf/ico/ico-alert-success.svg';
-import BasicButton from '../Button';
+import BasicButton from '@/views/components/common/button/Button';
 
 interface PropsType {
   children: React.ReactNode;
