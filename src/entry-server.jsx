@@ -11,14 +11,12 @@ let persistor = persistStore(store);
 
 export function render(url, context) {
   return ReactDOMServer.renderToString(
-    <React.StrictMode>
-      <StaticRouter location={url} context={context}>
-        <Provider store={store}>
-          <PersistGate persistor={persistor}>
-            <App />
-          </PersistGate>
-        </Provider>
-      </StaticRouter>
-    </React.StrictMode>
+    <StaticRouter location={url} context={context}>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </StaticRouter>
   );
 }

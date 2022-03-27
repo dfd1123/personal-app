@@ -50,7 +50,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,
   }),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: true,
 });
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;

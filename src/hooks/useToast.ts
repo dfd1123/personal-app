@@ -3,9 +3,11 @@ import { useDispatch } from 'react-redux';
 import { ToastType } from '@/store/modal/types/toast';
 import { addToast, removeToast } from '@/store/modal/toast';
 import { removeModal } from '@/store/modal/modal';
+import { FunctionComponent, SVGProps } from 'react';
 
 export interface ToastOption {
   type?: 'success' | 'warning';
+  emoji?: string;
   duration?: number;
 }
 
@@ -20,19 +22,22 @@ const useToast = () => {
     msg: string,
     options: ToastOption | undefined = {
       type: 'warning',
+      emoji: '',
       duration: 1000,
     }
   ) => {
-    let { type, duration } = options;
+    let { type, emoji, duration } = options;
 
     const toast: ToastType = {
       id: -1,
       msg,
       type: type ?? 'warning',
+      emoji,
       duration: duration ?? 1000,
     };
-
-    dispatch(addToast({ toast }));
+    setTimeout(() => {
+     dispatch(addToast({ toast }));
+    }, 1);
   };
 
   const closeToast = (id: number): void => {

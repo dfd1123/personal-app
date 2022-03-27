@@ -1,16 +1,22 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import basicResetClose from "@/assets/img/icon/ico-circle-close.svg";
-import searchIcon from "@/assets/img/kmf/ico/ico-search2.svg";
+import BasicResetClose from "@/assets/images/icon/icon-circle-cancel.svg?component";
+import VerifyCountDown from "@/views/components/auth/VerifyCountDown";
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   reset?: boolean;
   number?:boolean;
+  verify?: boolean;
+  error?:boolean;
+  errorMsg?: string;
   autocomplete?:'on'|'off';
   onEnter?: (value : any , name?: any) => void;
+  onInput?: (value : any , name?: any) => void;
   onChange?: (value : any , name?: any) => void;
+  onResend?: () => void;
+  onVerifyEnd?: () => void;
 }
 
 const TextInput = ({
@@ -19,16 +25,22 @@ const TextInput = ({
   type = "text",
   name,
   value = '',
+  maxLength = 99999,
   placeholder = "",
   readOnly = false,
   disabled = false,
-  tabIndex = 0,
   reset = false,
+  error = false,
+  errorMsg,
   number = false,
+  verify = false,
   autoComplete = 'off',
   onEnter,
+  onInput,
   onChange,
-  onClick
+  onClick,
+  onResend,
+  onVerifyEnd
 }: PropsType) => {
   const isSearch = type === "search";
   const input = useRef<HTMLInputElement>(null);
@@ -63,8 +75,12 @@ const TextInput = ({
     if(number) {
       value = value.replace(/[^0-9]/g,'');
     }
+    if(maxLength){
+      value = value.substring(0, maxLength);
+    }
     setText(value);
     if (onChange) onChange(value, name);
+    if (onInput) onInput(value, name);
   };
 
   const handleReset = () => {
@@ -77,135 +93,218 @@ const TextInput = ({
   };
 
   return (
-    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
-      <div className="inp-cont">
-        <input
-          ref={input}
-          type={type}
-          name={name}
-          value={value || text}
-          placeholder={placeholder}
-          readOnly={readOnly}
-          disabled={disabled}
-          tabIndex={tabIndex}
-          autoComplete={autoComplete}
-          onKeyPress={handleKeyPress}
-          onChange={handleValueChange}
-          onFocus={() => toggleFocus(true)}
-          onBlur={() => toggleFocus(false)}
-          onClick={onClick}
-        />
-        <div className="btn-cont">
-          {text && reset ? (
-            <button className="reset" onMouseDown={handleReset} />
-          ) : (
-            ""
-          )}
-          {isSearch ? <button className="search" onClick={handleEnter} /> : ""}
+    <div className={className}>
+      <div className={`inp-box ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${String(text) ? "value" : ""} ${reset ? "reset" : ""} ${disabled ? 'disabled' : ''} ${error ? 'error' : ''} ${verify ? 'verify' : ''}`}>
+        <div className="inp-cont">
+          <input
+            ref={input}
+            type={type}
+            name={name}
+            value={value || text}
+            placeholder={placeholder}
+            readOnly={readOnly}
+            disabled={disabled}
+            autoComplete={autoComplete}
+            onKeyPress={handleKeyPress}
+            onChange={handleValueChange}
+            onInput={handleValueChange}
+            onFocus={() => toggleFocus(true)}
+            onBlur={() => toggleFocus(false)}
+            onClick={onClick}
+          />
+          <div className="btn-cont">
+            {verify ? (
+              <VerifyCountDown initialTime={180} onResend={onResend} onEnd={onVerifyEnd} />
+            ) : ('')}
+            {text && reset ? (
+              <button className="reset" onMouseDown={handleReset} >
+                <BasicResetClose />
+              </button>
+            ) : (
+              ""
+            )}
+            {isSearch ? <button className="search" onMouseDown={handleEnter} /> : ""}
+          </div>
         </div>
+        {label ? <label htmlFor={name}>{label}</label> : ""}
       </div>
-      {label ? <label htmlFor={name}>{label}</label> : ""}
+      {errorMsg ? (<span className="error-msg">{errorMsg}</span>):('')}
     </div>
   );
 };
 
 export const BasicInput = styled(TextInput)`
-  position: relative;
-  display: inline-flex;
-  flex-direction: column-reverse;
-
-  .inp-cont {
+  display:inline-block;
+  .inp-box{
     position: relative;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 8px;
-    padding-left:3px;
-    font-size:14px;
-    line-height: 20px;
-    color:#828282;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #F4F4F4;
-    border-radius: 5px;
-    background-color: #F4F4F4;
-
-    &::placeholder{
-      color:#BFBFBF;
-    }
-  }
-
-  .btn-cont {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
     display: flex;
-    align-items: center;
-    height: 100%;
-    > button {
-      padding: 0 3px;
-      &:last-child {
-        margin-right: 7px;
-      }
-      &::after {
-        content: "";
-        display: block;
-        width: 15px;
-        height: 15px;
-        background-position: center;
-        background-size: 100%;
-        background-repeat: no-repeat;
-      }
-    }
-    .reset {
-      display: none;
-      opacity: 0.4;
-      &::after {
-        width: 15px;
-        height: 15px;
-        background-image: url(${basicResetClose});
+    flex-direction: column-reverse;
+    width: inherit;
+    height: inherit;
+    padding:14px 16px 15px;
+    border: 1px solid #f8f8f8;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    transition: border 0.15s, background-color 0.15s;
+
+    &.focus, &.verify{
+      border: 1px solid #000000;
+      background-color: #fff;
+
+      &.verify{
+        border: 1px solid #000000;
+        background-color: #fff;
       }
     }
 
-    .search {
-      /* opacity: 0.4; */
-      &::after {
-        width: 28px;
-        height: 28px;
-        background-image: url(${searchIcon});
+    &.value{
+      border: 1px solid #ddd;
+      background-color: #fff;
+
+      &.verify{
+        border: 1px solid #ddd;
+        background-color: #fff;
       }
     }
-  }
 
-  &.focus {
+    &.error{
+      border: 1px solid #DD250D;
+    }
+
+    /* &.disabled{
+      border: 1px solid #ddd;
+      background-color: #fff;
+    } */
+
+    .inp-cont {
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 3px;
+      padding-left:0px;
+      font-size:13px;
+      line-height: 18px;
+      color:#777;
+    }
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      font-size: 18px;
+      line-height: 22px;
+      border:none;
+      outline:transparent;
+      background-color: transparent;
+
+      &::placeholder{
+        color:#ccc;
+      }
+    }
+
     .btn-cont {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      > button {
+        height:100%;
+        &:last-child {
+          margin-right: 0;
+        }
+        &::after {
+          content: "";
+          display: block;
+          width: 15px;
+          height: 15px;
+          background-position: center;
+          background-size: 100%;
+          background-repeat: no-repeat;
+        }
+      }
       .reset {
         display: block;
+        svg{
+          width:24px;
+          height:24px;
+        }
+      }
+
+      .search {
+        /* opacity: 0.4; */
+        &::after {
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      ${VerifyCountDown}{
+        visibility: visible;
       }
     }
-  }
 
-  &.reset {
     &.focus {
-      input {
-        padding-right: 30px;
+      .btn-cont {
+        .reset {
+          display: block;
+        }
+        ${VerifyCountDown}{
+          visibility: visible;
+        }
       }
-      &.search {
-        input {
-          padding-right: 60px;
+
+      &.value{
+        .btn-cont {
+          ${VerifyCountDown}{
+            visibility: hidden;
+          }
         }
       }
     }
+
+    &.value{
+      .btn-cont {
+        ${VerifyCountDown}{
+          visibility: visible;
+        }
+      }
+    }
+
+    &.reset {
+      &.focus {
+        input {
+          padding-right: 30px;
+        }
+        &.search {
+          input {
+            padding-right: 60px;
+          }
+        }
+      }
+    }
+
+    &.search {
+      input {
+        padding-right: 50px;
+      }
+    }
+
+    &.verify{
+      input {
+        padding-right: 100px;
+      }
+    }
   }
 
-  &.search {
-    input {
-      padding-right: 50px;
-    }
+  .error-msg{
+    margin-top:8px;
+    padding: 0 2px;
+    font-size: 14px;
+    line-height: 18px;
+    color:#DD250D;
   }
 `;
 

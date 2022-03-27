@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import useToast from "@/hooks/useToast";
-import { CSSTransition } from "react-transition-group";
-import { ToastType } from "@/store/modal/types/toast";
-import { SMALL_MOBILE_SIZE, TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import useToast from '@/hooks/useToast';
+import { CSSTransition } from 'react-transition-group';
+import { ToastType } from '@/store/modal/types/toast';
+import {
+  SMALL_MOBILE_SIZE,
+  TABLET_SIZE,
+} from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType {
   toast: ToastType;
 }
 
 const ToastComponent = ({ toast }: PropsType) => {
+  const [timeOutId, setTimeOutId] = useState(0);
   const [open, setOpen] = useState(false);
   const { closeToast } = useToast();
   const animationDuration = 400;
@@ -24,18 +28,35 @@ const ToastComponent = ({ toast }: PropsType) => {
   useEffect(() => {
     setOpen(true);
 
-    setTimeout(() => {
+    const id = setTimeout(() => {
       close();
     }, (toast.duration ?? 0) + animationDuration);
 
+    setTimeOutId(id);
+
     return () => closeToast(toast.id);
   }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(timeOutId);
+  }, [timeOutId]);
 
   return (
     <ToastComponentStyle toast={toast} animationDuration={animationDuration}>
       <CSSTransition in={open} timeout={animationDuration} classNames="toast">
         <div className={`toast ${toast.type}`} onClick={close}>
-          <span>{toast.msg}</span>
+          {toast.emoji ? (
+            toast.emoji.includes('.svg') ? (
+              <span className="emoji">
+                <img src={toast.emoji} alt="emoji" />
+              </span>
+            ) : (
+              <span className="emoji" dangerouslySetInnerHTML={{__html: toast.emoji}} />
+            )
+          ) : (
+            ''
+          )}
+          <span className="msg" dangerouslySetInnerHTML={{__html: toast.msg}} />
         </div>
       </CSSTransition>
     </ToastComponentStyle>
@@ -50,9 +71,11 @@ const ToastComponentStyle = styled.div<{
   justify-content: center;
   align-items: center;
   pointer-events: none;
+  padding: 0 16px;
+  width: 100%;
 
   > div {
-      display:inline-block;
+    display: inline-flex;
     margin-top: 10px;
     cursor: pointer;
     pointer-events: auto;
@@ -62,6 +85,8 @@ const ToastComponentStyle = styled.div<{
     &.toast {
       border-radius: 20px;
       padding: 10px 20px;
+      font-size: 16px;
+      line-height: 21px;
 
       &.warning {
         color: #fff;
@@ -70,7 +95,23 @@ const ToastComponentStyle = styled.div<{
 
       &.success {
         color: #fff;
-        background-color: #00b600;
+        background: rgba(89, 115, 255, 0.65);
+        backdrop-filter: blur(20px);
+      }
+
+      .emoji {
+        margin-right: 8px;
+        /* img{
+          width:18px;
+          height: 18px;
+        } */
+      }
+
+      .msg {
+        vertical-align: middle;
+        display: inline-block;
+        color: inherit;
+        word-break: break-all;
       }
     }
 
@@ -101,21 +142,18 @@ const ToastComponentStyle = styled.div<{
   }
 
   @media (max-width: ${TABLET_SIZE}) {
-      flex-direction: column-reverse;
     > div {
       &.toast {
-        border-radius: 20px;
-        padding: 10px 20px;
-        background-color: rgba(0, 0, 0, 0.8) !important;
+        width: 100%;
+        border-radius: 8px;
+        padding: 20px;
 
         &.warning {
           color: #fff;
-          border: 1px solid red;
         }
 
         &.success {
           color: #fff;
-          border: 1px solid #00b600;
         }
       }
     }
@@ -146,10 +184,8 @@ const ToastComponentStyle = styled.div<{
     }
   }
 
-  @media (max-width: ${SMALL_MOBILE_SIZE}){
+  @media (max-width: ${SMALL_MOBILE_SIZE}) {
     > div {
-        width:95%;
-      max-width:300px;
     }
   }
 `;

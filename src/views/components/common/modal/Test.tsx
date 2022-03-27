@@ -1,6 +1,6 @@
 import {ModalStyle} from "@/views/components/common/modal/ModalTemplate";
 import { ModalComponentPropsType } from "@/store/modal/types/modal";
-import BasicButton from "@/views/components/common/Button";
+import BasicButton from "@/views/components/common/button/Button";
 
 const TestModal = ({nonModal, close, resolve} : ModalComponentPropsType) => {
     return (

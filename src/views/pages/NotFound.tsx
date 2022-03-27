@@ -1,4 +1,5 @@
 import React from 'react';
+import OneDepthHeader from '@/views/layout/header/OneDepthHeader';
 
 
 function NotFound() {

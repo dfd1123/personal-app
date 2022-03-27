@@ -3,6 +3,7 @@ import useToast, { ToastOption } from '@/hooks/useToast';
 import ApiConnection from '@/modules/ApiConnection';
 import { useDispatch } from 'react-redux';
 import CookieService from '@/services/CookieService';
+import UserService from '@/services/UserService';
 
 const useService = () => {
   const { toast }: { toast: (msg: string, options?: ToastOption) => void } =
@@ -13,8 +14,9 @@ const useService = () => {
 
   const api: ApiConnection = new ApiConnection({
     toast,
-    cookie
+    cookie,
   });
+  
 
   const serviceParams = {
     api: api,
@@ -24,6 +26,7 @@ const useService = () => {
 
   const services = {
     cookie: cookie,
+    user: new UserService(serviceParams),
   };
 
   return { ...services };

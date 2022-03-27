@@ -4,7 +4,6 @@ export interface ModalType {
   id: number;
   props?: any;
   animation?:{
-    in: boolean;
     class: string;
     duration?: number;
   };

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router';
 import NotFound from '@/views/pages/NotFound';
 import ErrorPage from '@/views/pages/ErrorPage';
 import {Route} from '@/types/Route';
+import Home from '@/views/pages/home/Home';
 
 // ex
 /*
@@ -21,7 +22,7 @@ const commonRoutes = {
 const common : Route[] = [
   {
     path: '/',
-    element: <Navigate to='/notice' />
+    element: <Home />
   },
   {
     path: '/404',

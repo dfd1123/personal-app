@@ -66,6 +66,8 @@ async function createServer(
         render = require('./dist/server/entry-server.js').render
       }
 
+      console.log(render);
+
       const context = {}
       const appHtml = render(url, context)
 

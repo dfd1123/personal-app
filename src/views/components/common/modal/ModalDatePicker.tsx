@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { ModalStyle } from '@/views/components/common/modal/ModalTemplate';
 import { ModalComponentPropsType } from '@/store/modal/types/modal';
-import BasicButton from '@/views/components/common/Button';
+import BasicButton from '@/views/components/common/button/Button';
 // import Calendar from '@/views/components/common/Calendar';
 import Calendar from 'react-calendar';
 import { dateFormat } from '@/utils/dateUtils';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ModalType } from "@/store/modal/types/modal";
 import { useEffect, useState } from "react";
 import styled from "styled-components";

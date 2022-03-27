@@ -1,5 +1,7 @@
 import React from 'react';
 import common from '@/router/common';
+import auth from '@/router/auth';
+import mateRoom from '@/router/mateRoom';
 import { setRouteInfo } from '@/store/info/infoReducer';
 import { Route, RouteMeta } from '@/types/Route';
 import { useEffect } from 'react';
@@ -9,7 +11,9 @@ import NotFound from '@/views/pages/NotFound';
 import useService from '@/hooks/useService';
 
 const routeList: Route[] = [
-  ...common
+  ...common,
+  ...auth,
+  ...mateRoom
 ];
 
 export default function RouterView() {
@@ -59,6 +63,8 @@ export default function RouterView() {
     return { routeInfo: routeInfo ?? null, meta: routeInfo?.meta ?? {} };
   };
 
+  console.log('routing!');
+
   /**
    * @description middleware 검증 후 route 배열 정보를 routes 변수에 저장
    */
@@ -75,9 +81,10 @@ export default function RouterView() {
    * @description 현재 라우팅 되는 route 정보를 redux에 mutate
    */
 
-  // useEffect(() => {
-  //   dispatch(setRouteInfo({ routeInfo }));
-  // }, []);
+  useEffect(() => {
+    dispatch(setRouteInfo({ routeInfo }));
+    services.user.getMyInfo();
+  }, []);
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';

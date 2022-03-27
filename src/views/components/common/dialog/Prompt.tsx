@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DialogComponentPropsType } from "@/store/modal/types/dialog";
 import styled from "styled-components";
-import BasicButton from "@/views/components/common/Button";
+import BasicButton from "@/views/components/common/button/Button";
 import TextInput from "@/views/components/common/input/TextInput";
 import DialogTemplete from "@/views/components/common/dialog/DialogTemplete";
 

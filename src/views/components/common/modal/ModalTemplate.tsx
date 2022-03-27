@@ -48,7 +48,45 @@ export const ModalStyle = styled(ModalTemplate)`
     }
 
     .cont {
+    }
+  }
+`;
 
+export const BottomModalStyle = styled(ModalTemplate)`
+  .dim {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0px);
+    .cont {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 220px;
+      background-color: #fff;
+      border-radius: 20px 20px 0px 0px;
+      transform: translateY(100%);
+    }
+  }
+
+  &.fade-enter-done {
+    .dim {
+      transition: backdrop-filter ease-out 0.2s;
+      backdrop-filter: blur(2px);
+    }
+
+    .cont {
+      transition: transform ease-out 0.1s 0.25s;
+      transform: translateY(0px);
     }
   }
 `;

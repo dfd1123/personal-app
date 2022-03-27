@@ -4,15 +4,24 @@ class CookieService {
     #cookies = Cookies;
     
     getAccessToken(){
-        return this.#cookies.get('accessToken');
+        return this.#cookies.get('gateAccessToken');
     }
 
-    setAccessToken(accessToken : string){
-        this.#cookies.set('accessToken', accessToken, {expires: 30});
+    getRefreshToken(){
+        return this.#cookies.get('gateRefreshToken');
+    }
+
+    setAccessToken(accessToken : string, refreshToken?: string){
+        this.#cookies.set('gateAccessToken', accessToken, {expires: 30});
+
+        if(refreshToken){
+            this.#cookies.set('gateRefreshToken', accessToken, {expires: 30});
+        }
     }
 
     removeAccessToken(){
-        this.#cookies.remove('accessToken');
+        this.#cookies.remove('gateAccessToken');
+        this.#cookies.remove('gateRefreshToken');
     }
 
     getHitCnt(key : 'notice' | 'ref', id: number | string){

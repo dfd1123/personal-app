@@ -9,7 +9,7 @@ import ToastContainer from '@/views/components/common/toast/ToastContainer';
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme.dark}>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <RouterView />
       <ModalContainer />

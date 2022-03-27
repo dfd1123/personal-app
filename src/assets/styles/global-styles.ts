@@ -1,15 +1,13 @@
 import { createGlobalStyle } from "styled-components";
 import { normalize } from "styled-normalize";
 import { reset } from "styled-reset";
-import RobotoFont from "@/assets/font/Roboto/font.css";
-import NotoSansFont from "@/assets/font/NotoSans/font.css";
+import Pretendard from "@/assets/font/Pretendard/pretendard-subset.css";
 import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
   ${normalize}
-  ${RobotoFont}
-  ${NotoSansFont}
+  ${Pretendard}
 
   html,
   body {
@@ -17,7 +15,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, menu, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, main, menu, nav, output, ruby, section, summary, time, mark, audio, video{
-    font-family: 'Roboto';
+    font-family: 'Pretendard';
+    color: #222;
   }
 
   h1, h2, h3, h4, h5, h6, p{
@@ -47,7 +46,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-tap-highlight-color: transparent !important;
   }
 
-  img{
+  img, svg{
     vertical-align: middle;
   }
 
@@ -73,12 +72,21 @@ const GlobalStyle = createGlobalStyle`
       -webkit-appearance: none;
       margin: 0;
   }
+  h1, h2, h3, h4, h5, h6 { font-weight:700; }
+  h1{ font-size:28px; line-height: 36px; }
+  h2{ font-size:26px; line-height: 34px; }
+  h3{ font-size:20px; line-height: 26px; }
+  h4{ font-size:18px; line-height: 22px; }
 
   #root{
+    /* max-width: 1080px; */
     height:100%;
+    /* margin:0 auto;
+    background-color:#fff; */
   }
 
   #wrapper{
+    padding-bottom: 56px;
     /* min-height:100%;
     margin-top:-74px;
     margin-bottom: -300px;

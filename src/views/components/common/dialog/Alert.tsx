@@ -1,5 +1,5 @@
 import { DialogComponentPropsType } from '@/store/modal/types/dialog';
-import BasicButton from '@/views/components/common/Button';
+import BasicButton from '@/views/components/common/button/Button';
 import DialogTemplete from '@/views/components/common/dialog/DialogTemplete';
 import Component from '@/views/components/common/Component';
 
